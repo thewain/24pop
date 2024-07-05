@@ -1,0 +1,112 @@
+<!-- 참고 : 서버에 올려놓고 테스트하거나 비주얼스튜디오 코드에서는
+    liveServer와 같은 가상웹서버에서 실행하셔야 쿠키 데이터를 적용시킬 수 있습니다 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    .popup{
+        
+        width: 40%;
+        position: fixed;
+        top: 15%;
+        left: 15%;
+        border: 1px solid #767676;
+        border-radius: 5px;
+        padding: 10px;
+
+    }
+    .popup img{width: 100%;}
+    .footer-td button{
+        background-color: transparent;
+        border: 1px solid #767676;
+        padding: 5px;
+        border-radius: 5px;
+    }
+    .footer-td button:nth-child(2){margin-left: 20px;}
+    .footer-td button:hover{background-color: #767676; color: #fff;}
+    .footer-td{
+        margin-top: 20px;
+        text-align: right;
+    }
+
+</style>
+
+<body>
+    <div id="popupDiv" class="popup">
+
+        <div class="contents" id="popup_1">
+      
+         <a href="#" target="_blank"><img src="https://ai.esmplus.com/gnscoffee/14_etc/buykinghp.jpg"> </a>
+      
+        </div>
+      
+        <div class="footer-td flex">
+      
+          <button class="btn-close" type="button">오늘하루열지않기</button>
+      
+          <button class="close-modal" type="button">  팝업닫기</button>
+        </div>
+      
+    </div>
+
+
+
+    <script src="js/jquery-3.7.0.min.js"></script>
+    <script>
+
+$(function(){
+        $(".close-modal").click(function (){
+            $("#popupDiv").hide();
+        });
+    });
+
+    var getCookie = function (cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1);
+            if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
+        }
+        return "";
+    }
+
+    var setCookie = function (cname, cvalue, exdays) {
+        var todayDate = new Date();
+        todayDate.setHours(24, 0, 0, 0); // 오늘 자정 시각 설정
+        var expires = "expires=" + todayDate.toUTCString(); 
+        document.cookie = cname + "=" + cvalue + "; " + expires;
+    }
+
+    var couponClose = function(sta){
+        if(sta == 1){
+            setCookie("close","Y",1); // 쿠키 "close"를 1일 동안 유지하도록 설정
+        }
+        $("#popupDiv").hide(); // 팝업 숨기기
+    }
+
+    $(document).ready(function(){
+        var cookiedata = document.cookie;
+        if(cookiedata.indexOf("close=Y") < 0){
+            $("#popupDiv").show(); // 쿠키에 "close=Y"가 없으면 팝업 보이기
+        } else {
+            $("#popupDiv").hide(); // 쿠키에 "close=Y"가 있으면 팝업 숨기기
+        }
+
+        $(".btn-close").click(function(){
+            couponClose(1); // "오늘하루열지않기" 버튼 클릭 시 쿠키 설정하고 팝업 숨기기
+        });
+    });
+
+    </script>
+    
+</body>
+</html>
+
+
+
